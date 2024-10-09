@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Company Data</title>
+    <script>
+        function printPage() {
+            window.print();
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        div {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .no-print {
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select, input[type="date"], input[type="submit"] {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+
+        input[type="submit"] {
+            background-color: #5cb85c;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            th, td {
+                border: 1px solid #000;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Data for {{ company }}</h1>  <!-- Display selected company -->
+
+    <div>
+        {{ filtertitle[0] if filtertitle is not none and filtertitle != '' and filtertitle|length > 0 else "" }}
+    </div>
+
+    <!-- Add a search field to filter data -->
+    <form method="post" class='no-print'>
+        <label for="dropdown">Filter by:</label>
+        <select name="dropdown">
+            <option value="paisa">paisa</option>
+            <option value="weight">weight</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <!-- Search input field -->
+        <label for="filterDate">Date</label>
+        <label for="filterDateFrom"> from : </label>
+        <input type="date" id="filterDateFrom" name="filterDateFrom">
+        <label for="filterDateTo"> to : </label>
+        <input type="date" id="filterDateTo" name="filterDateTo">
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <table>
+        <tr>
+            {% for header in headers %}
+                {% if header != "flag" %}
+                    <th>{{ header }}</th>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% for row in data %}
+        <!-- Search will filter rows that contain the search term in any of the relevant fields -->
+        <tr>
+            <td>{{ row['Date'] }}</td>
+            <td>{{ row['Name'] }}</td>
+            <td>{{ row['Box'] }}</td>
+            <td>
+                {% if row['flag'] == 0 %}
+                    <strong>{{ row['Dozen'] }}</strong>
+                {% else %}
+                    {{ row['Dozen'] }}
+                {% endif %}
+            </td>
+            <td>
+                {% if row['flag'] == 1 %}
+                    <strong>{{ row['Total Items'] if row['Total Items'] is not none else '' }}</strong>
+                {% else %}
+                    {{ row['Total Items'] if row['Total Items'] is not none else '' }}
+                {% endif %}
+            </td>
+            <td>{{ row['Weight'] if row['Weight'] is not none else '' }}</td>
+            <td>{{ row['Total Weight'] if row['Total Weight'] is not none else '' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if not data %}
+        <p>No data available for the selected option.</p>  <!-- Notify when no data -->
+    {% endif %}
+
+    <!-- Add the Print button and apply no-print class -->
+    <button class="no-print" onclick="printPage()">Print</button>
+    <button class="no-print" onclick="window.location.href='/'">Go Back</button>
+</body>
+</html>
