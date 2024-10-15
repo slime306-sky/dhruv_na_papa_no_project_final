@@ -90,7 +90,7 @@ def view_data(company):
 
 @app.route('/company', methods=['GET', 'POST'])
 def get_company():
-    data = data_manager.get_data()  # Use the instance
+    data = data_manager.get_data(data_manager)  # Use the instance
     data = [{'id': t[0], 'name': t[1]} for t in data]
     if request.method == 'POST':
         name = request.form['name']
@@ -125,18 +125,18 @@ def add_data(company):
         date = request.form.get('date', '')
         name = request.form.get('name', '')
         try:
-            box = int(request.form.get('box', '0'))  # Default to 0 if not provided
-            total_items = int(request.form.get('totalItem', '0'))  # Default to 0 if not provided
+            box = request.form.get('box', '0')# Default to 0 if not provided
+            total_items = request.form.get('totalItem', '0')  # Default to 0 if not provided
         except ValueError:
             return "Invalid input. Please enter numeric values for box and total items.", 400  # Handle invalid input
 
-        option_input = int(request.form.get('input', '0'))  # Default to 0 if not provided
+        option_input = request.form.get('input', '0')  # Default to 0 if not provided
         option = request.form.get('option', '')
         count = request.form.get('agree', '')
         both = request.form.get('both', '')
 
         # Call data_manager's add_data method with correct parameters
-        data_manager.add_data(
+        data_manager.add_data(data_manager,
             date=date, name=name, box=box, total_item=total_items,
             option_input=option_input, option=option, count=count, both=both, company=company
         )
