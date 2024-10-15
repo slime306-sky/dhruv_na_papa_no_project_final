@@ -104,19 +104,19 @@ class data_manager:
         if both == "":
             if option == "paisa":
                 if count == "on":
-                    self.calculatePaisaUsingDozen(cursor, date, name, box, dazon, option_input, company)
+                    self.calculatePaisaUsingDozen(self,cursor, date, name, box, dazon, option_input, company)
                 elif count == "off":
-                    self.calculatePaisaUsingDozen(cursor, date, name, box, dazon, option_input, company)
+                    self.calculatePaisaUsingDozen(self,cursor, date, name, box, dazon, option_input, company)
             elif option == "weight":
-                self.calculateWieghtUsingDozenToTotalItem(cursor, date, name, box, dazon, option_input, company)
+                self.calculateWieghtUsingDozenToTotalItem(self,cursor, date, name, box, dazon, option_input, company)
         else:
             if option == "paisa":
                 if count == "on":
-                    self.calculateBothUsingdozen(cursor, date, name, box, dazon, option_input, both, company)
+                    self.calculateBothUsingdozen(self,cursor, date, name, box, dazon, option_input, both, company)
                 elif count == "off":
-                    self.calculateBothUsingdozen(cursor, date, name, box, dazon, option_input, both, company)
+                    self.calculateBothUsingdozen(self,cursor, date, name, box, dazon, option_input, both, company)
             elif option == "weight":
-                self.calculateBothUsingDozenTOTotalItem(cursor, date, name, box, dazon, option_input, both, company)
+                self.calculateBothUsingDozenTOTotalItem(self,cursor, date, name, box, dazon, option_input, both, company)
 
         conn.commit()
         conn.close()
